@@ -1,0 +1,44 @@
+# Python & Main Board
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# Heavy AI Weights & Local Databases (Do NOT push to Git)
+main_board/data/*.gguf
+main_board/data/*.onnx
+main_board/data/*.bin
+main_board/data/*.pt
+main_board/data/*.index
+main_board/data/user_memory.json
+*.wav
+*.mp3
+
+# Secrets & Firebase Credentials
+*firebase-adminsdk*.json
+serviceAccountKey.json
+.env
+
+# Pico RP2040 C/C++ Build Artifacts
+pico_firmware/build/
+*.uf2
+*.elf
+*.hex
+*.map
+
+# Mobile App (Flutter / React Native)
+mobile_app/build/
+mobile_app/.dart_tool/
+mobile_app/.packages
+mobile_app/node_modules/
+mobile_app/android/.gradle/
+mobile_app/ios/Pods/
+
+# OS & IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
