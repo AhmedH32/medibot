@@ -3,30 +3,31 @@ active_profile: "win11_laptop"  # Switch to "pi5" when deploying to Raspberry Pi
 profiles:
   win11_laptop:
     serial:
-      port: "COM10"             # Paired with COM11 (mock_pico.py) via com0com on Windows
-      mock_port: "COM11"
+      port: "socket://localhost:5555"  # PySerial TCP loopback (connects to mock_pico.py or Wokwi)
+      mock_bind_host: "127.0.0.1"
+      mock_bind_port: 5555
       baudrate: 115200
       timeout_s: 0.005
     vision:
-      camera_id: 0              # Laptop built-in webcam
+      camera_id: 0                     # Laptop built-in webcam
       model_path: "data/yolov8n-pose.onnx"
       imgsz: 320
       tracking_fps: 15
       dialogue_fps: 2
     audio:
-      input_device: null        # System default mic
-      output_device: null       # System default speakers
+      input_device: null               # System default mic
+      output_device: null              # System default speakers
     compute:
       enable_core_pinning: false
       llm_threads: 4
 
   pi5:
     serial:
-      port: "/dev/ttyAMA0"      # Pi 5 GPIO 14 (TX) / GPIO 15 (RX) -> Pico GP0/GP1
+      port: "/dev/ttyAMA0"             # Pi 5 GPIO 14 (TX) / GPIO 15 (RX) -> Pico GP0/GP1
       baudrate: 115200
       timeout_s: 0.005
     vision:
-      camera_id: "/dev/video0"  # 1m Mast UVC USB Webcam
+      camera_id: "/dev/video0"         # 1m Mast UVC USB Webcam
       model_path: "data/yolov8n-pose_ncnn_model"
       imgsz: 320
       tracking_fps: 12
@@ -40,12 +41,12 @@ profiles:
         io_arbiter: [0]
         vision_pose: [1]
         ai_normal: [2, 3]
-        ai_dialogue: [1, 2, 3]  # Claims Core 1 when Flag 0x04 (Dialogue Hold) is active
+        ai_dialogue: [1, 2, 3]         # Claims Core 1 when Flag 0x04 (Dialogue Hold) is active
       llm_threads: 3
 
 slos:
-  uart_tx_hz: 50                # 20ms period (Pico hardware watchdog triggers at 200ms)
-  uart_rx_hz: 10                # 100ms telemetry period
-  fcm_heartbeat_sec: 300        # 5-minute dead-man switch ping
+  uart_tx_hz: 50                       # 20ms period (Pico hardware watchdog triggers at 200ms)
+  uart_rx_hz: 10                       # 100ms telemetry period
+  fcm_heartbeat_sec: 300               # 5-minute dead-man switch ping
   target_follow_dist_m: 1.5
   sonar_stop_cm: 20
