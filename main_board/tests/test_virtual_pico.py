@@ -12,6 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from core.protocol import CommandPacket, TelemetryStreamParser, FLAG_MOTOR_ENABLE
 from hal.serial_link import SerialLink
 from tests.mock_pico import MockPicoServer
+from core.uart_daemon import UARTDaemon
 
 
 @pytest.fixture(scope="module")
@@ -91,3 +92,37 @@ def test_checksum_corruption_rejection(mock_pico):
 
     assert mock_pico.watchdog_triggered, "Corrupted packet was erroneously accepted by the server"
     link.close()
+
+
+
+
+def test_uart_daemon_odometry_and_safety_reflexes(mock_pico):
+    """Gate 4: Verify UARTDaemon background 50Hz worker, odometry, sonar stop, and stall reflex."""
+    mock_pico.sim_sonar_cm = 150
+    mock_pico.sim_is_stalled = False
+
+    daemon = UARTDaemon(port_url="socket://127.0.0.1:5555", tx_hz=50, sonar_stop_cm=20)
+    daemon.start()
+
+    # 1. Command forward motion (25 cm/s) for 0.5 seconds
+    daemon.set_command(vx=25, wz=0, flags=FLAG_MOTOR_ENABLE)
+    time.sleep(0.55)
+
+    pose = daemon.get_pose()
+    assert pose.x_cm > 5.0, f"Expected forward odometry displacement, got {pose.x_cm:.2f} cm"
+    assert not mock_pico.watchdog_triggered
+
+    # 2. Inject a sudden wall obstacle at 15 cm (< 20 cm threshold)
+    mock_pico.sim_sonar_cm = 15
+    time.sleep(0.25)  # Allow telemetry to arrive and daemon reflex to override Vx
+    assert mock_pico.current_cmd.vx == 0, "Daemon failed to block forward Vx when sonar < 20cm"
+
+    # 3. Clear obstacle, then inject a carpet motor stall (Byte 6 Bit 7)
+    mock_pico.sim_sonar_cm = 150
+    mock_pico.sim_is_stalled = True
+    time.sleep(0.20)
+    assert mock_pico.current_cmd.flags == 0, "Daemon failed to drop motor enable flag on stall alert"
+
+    # Restore mock state and shut down daemon
+    mock_pico.sim_is_stalled = False
+    daemon.stop()
