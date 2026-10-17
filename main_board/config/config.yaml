@@ -3,7 +3,7 @@ active_profile: "win11_laptop"  # Switch to "pi5" when deploying to Raspberry Pi
 profiles:
   win11_laptop:
     serial:
-      port: "socket://localhost:5555"  # PySerial TCP loopback (connects to mock_pico.py or Wokwi)
+      port: "socket://127.0.0.1:5555"  # PySerial TCP loopback (connects to mock_pico.py or Wokwi)
       mock_bind_host: "127.0.0.1"
       mock_bind_port: 5555
       baudrate: 115200
