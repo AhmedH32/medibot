@@ -18,18 +18,26 @@ class SerialLink:
         self.timeout_s = timeout_s
         self._handle: Optional[serial.Serial] = None
 
+    def __enter__(self) -> "SerialLink":
+        self.open()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.close()
+
     def open(self) -> None:
         """Opens physical UART or establishes low-latency TCP loopback socket."""
         if self._handle and self._handle.is_open:
             return
 
         logger.info(f"Connecting serial link via: {self.port_url}")
-        # timeout=0.0 enforces non-blocking reads on both POSIX UART and TCP sockets
+        # timeout=0.0 and write_timeout=0.0 enforce non-blocking I/O on both POSIX UART
+        # and pyserial socket:// handlers (avoids Windows 15.6ms time.time() false timeouts).
         self._handle = serial.serial_for_url(
             self.port_url,
             baudrate=self.baudrate,
             timeout=0.0,
-            write_timeout=0.01,
+            write_timeout=0.0,
         )
 
         # Disable Nagle's algorithm when running over TCP socket simulation
