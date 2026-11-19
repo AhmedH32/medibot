@@ -1,0 +1,7 @@
+[wokwi]
+version = 1
+firmware = 'build/medibot_pico.uf2'
+elf = 'build/medibot_pico.elf'
+# Exposes the Pico's serial monitor (UART0, GP0/GP1) so the Pi-side Python can connect:
+#   rfc2217://localhost:4000
+rfc2217ServerPort = 4000
