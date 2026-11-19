@@ -1,0 +1,344 @@
+{
+  "version": 1,
+  "author": "MediBot",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-pi-pico",
+      "id": "pico",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-mpu6050",
+      "id": "imu",
+      "top": -120,
+      "left": -250,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-ky-040",
+      "id": "encL",
+      "top": 150,
+      "left": -250,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-ky-040",
+      "id": "encR",
+      "top": 150,
+      "left": -120,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "sonL",
+      "top": -130,
+      "left": 300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "sonR",
+      "top": -130,
+      "left": 450,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "batt",
+      "top": 150,
+      "left": 300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledLpwm",
+      "top": 300,
+      "left": -250,
+      "attrs": {
+        "color": "green"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledLin1",
+      "top": 300,
+      "left": -190,
+      "attrs": {
+        "color": "blue"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledLin2",
+      "top": 300,
+      "left": -130,
+      "attrs": {
+        "color": "cyan"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledRpwm",
+      "top": 300,
+      "left": -70,
+      "attrs": {
+        "color": "green"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledRin1",
+      "top": 300,
+      "left": -10,
+      "attrs": {
+        "color": "blue"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledRin2",
+      "top": 300,
+      "left": 50,
+      "attrs": {
+        "color": "cyan"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledStby",
+      "top": 300,
+      "left": 110,
+      "attrs": {
+        "color": "red"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "imu:VCC",
+      "pico:3V3",
+      "red",
+      []
+    ],
+    [
+      "imu:GND",
+      "pico:GND.4",
+      "black",
+      []
+    ],
+    [
+      "imu:SDA",
+      "pico:GP4",
+      "green",
+      []
+    ],
+    [
+      "imu:SCL",
+      "pico:GP5",
+      "blue",
+      []
+    ],
+    [
+      "encL:CLK",
+      "pico:GP14",
+      "green",
+      []
+    ],
+    [
+      "encL:DT",
+      "pico:GP15",
+      "blue",
+      []
+    ],
+    [
+      "encL:VCC",
+      "pico:3V3",
+      "red",
+      []
+    ],
+    [
+      "encL:GND",
+      "pico:GND.5",
+      "black",
+      []
+    ],
+    [
+      "encR:CLK",
+      "pico:GP16",
+      "green",
+      []
+    ],
+    [
+      "encR:DT",
+      "pico:GP17",
+      "blue",
+      []
+    ],
+    [
+      "encR:VCC",
+      "pico:3V3",
+      "red",
+      []
+    ],
+    [
+      "encR:GND",
+      "pico:GND.5",
+      "black",
+      []
+    ],
+    [
+      "sonL:TRIG",
+      "pico:GP18",
+      "green",
+      []
+    ],
+    [
+      "sonL:ECHO",
+      "pico:GP19",
+      "blue",
+      []
+    ],
+    [
+      "sonL:VCC",
+      "pico:VBUS",
+      "red",
+      []
+    ],
+    [
+      "sonL:GND",
+      "pico:GND.6",
+      "black",
+      []
+    ],
+    [
+      "sonR:TRIG",
+      "pico:GP18",
+      "green",
+      []
+    ],
+    [
+      "sonR:ECHO",
+      "pico:GP20",
+      "blue",
+      []
+    ],
+    [
+      "sonR:VCC",
+      "pico:VBUS",
+      "red",
+      []
+    ],
+    [
+      "sonR:GND",
+      "pico:GND.6",
+      "black",
+      []
+    ],
+    [
+      "batt:VCC",
+      "pico:3V3",
+      "red",
+      []
+    ],
+    [
+      "batt:SIG",
+      "pico:GP26",
+      "orange",
+      []
+    ],
+    [
+      "batt:GND",
+      "pico:GND.7",
+      "black",
+      []
+    ],
+    [
+      "ledLpwm:A",
+      "pico:GP6",
+      "green",
+      []
+    ],
+    [
+      "ledLpwm:C",
+      "pico:GND.8",
+      "black",
+      []
+    ],
+    [
+      "ledLin1:A",
+      "pico:GP7",
+      "green",
+      []
+    ],
+    [
+      "ledLin1:C",
+      "pico:GND.8",
+      "black",
+      []
+    ],
+    [
+      "ledLin2:A",
+      "pico:GP8",
+      "green",
+      []
+    ],
+    [
+      "ledLin2:C",
+      "pico:GND.8",
+      "black",
+      []
+    ],
+    [
+      "ledRpwm:A",
+      "pico:GP9",
+      "green",
+      []
+    ],
+    [
+      "ledRpwm:C",
+      "pico:GND.8",
+      "black",
+      []
+    ],
+    [
+      "ledRin1:A",
+      "pico:GP10",
+      "green",
+      []
+    ],
+    [
+      "ledRin1:C",
+      "pico:GND.8",
+      "black",
+      []
+    ],
+    [
+      "ledRin2:A",
+      "pico:GP11",
+      "green",
+      []
+    ],
+    [
+      "ledRin2:C",
+      "pico:GND.8",
+      "black",
+      []
+    ],
+    [
+      "ledStby:A",
+      "pico:GP12",
+      "green",
+      []
+    ],
+    [
+      "ledStby:C",
+      "pico:GND.8",
+      "black",
+      []
+    ]
+  ],
+  "dependencies": {}
+}

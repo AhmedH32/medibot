@@ -1,0 +1,31 @@
+; 4-state quadrature front end. Samples A (base) and B (base+1) and pushes the new
+; 2-bit state to the RX FIFO on every change; encoders.c applies the 4x transition table.
+.program quad
+.wrap_target
+start:
+    mov isr, null
+    in pins, 2
+    mov x, isr
+    jmp x!=y, changed
+    jmp start
+changed:
+    push noblock
+    mov y, x
+.wrap
+
+% c-sdk {
+static inline void quad_program_init(PIO pio, uint sm, uint offset, uint pin_a) {
+    pio_sm_config c = quad_program_get_default_config(offset);
+    sm_config_set_in_pins(&c, pin_a);
+    sm_config_set_in_shift(&c, false, false, 32);
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_RX);
+    sm_config_set_clkdiv(&c, 12.5f);                // ~10 MHz sampling, far above ~4 k transitions/s
+    pio_gpio_init(pio, pin_a);
+    pio_gpio_init(pio, pin_a + 1);
+    gpio_pull_up(pin_a);
+    gpio_pull_up(pin_a + 1);
+    pio_sm_set_consecutive_pindirs(pio, sm, pin_a, 2, false);
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}
